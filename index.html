@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To do list</title>
+    <link rel="stylesheet" href="./main.css">
+</head>
+<body>
+    <main>
+        <section>
+            <div class="container">
+                <div class="wrap">
+                    <form class="wrap__form" method="post" autocomplete="off">
+                        <input class="wrap__input" type="text" placeholder="Enter your to do list" name="user_list" aria-label="Enter your to do list" required>
+                        <button class="wrap__btn" type="submit">Click</button>
+                    </form>
+                </div>
+                <ul class="select-list">
+                    <li class="select__item">
+                        <h3 class="select_title">Completed</h3>
+                        <p class="text1"></p>
+                    </li>
+                    <li class="select__item">
+                        <h3 class="select_title">Uncompleted</h3>
+                        <p class="text2"></p>
+                    </li>
+                    <li class="select__item">
+                        <h3 class="select_title">All Selected list</h3>
+                        <p class="text3"></p>
+                    </li>
+                </ul>
+                <ul class="list">
+                </ul>
+            </div>
+        </section>
+    </main>
+    <script src="./main.js"></script>
+</body>
+</html>
