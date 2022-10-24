@@ -74,8 +74,8 @@ p{
     display: flex;
     justify-content: space-between;
     width: 600px;
-    margin: 0px auto 0 auto;
-    padding-left: 0px;
+    margin: 0px auto 30px auto;
+    padding: 10px;
     background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,12,123,1) 0%, rgba(9,9,121,1) 64%, rgba(6,78,166,1) 100%, rgba(0,212,255,1) 100%);
     list-style-type: none;
 }
@@ -90,4 +90,10 @@ p{
 .select_text{
     text-align: center;
     color: #fff;
+}
+.completed,
+.uncompleted,
+.all{
+    color: #fff;
+    text-align: center;
 }

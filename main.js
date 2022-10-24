@@ -4,16 +4,20 @@ const elInput = elForm.querySelector(".wrap__input");
 const elBtn = elForm.querySelector(".wrap__btn");
 const elList = document.querySelector(".list");
 
-let text1 = document.querySelector(".text1"); 
-let text2 = document.querySelector(".text2"); 
-let text3 = document.querySelector(".text3"); 
+let completed = document.querySelector(".completed"); 
+let uncompleted = document.querySelector(".uncompleted"); 
+let all = document.querySelector(".all"); 
 
 const todos = [];
 let initialId = 0;
-
-let t1 = 0;
-let t2 = 0;
-let t3 = 0;
+let count = {
+    completed: 0,
+    uncompleted: 0,
+    all: 0,
+}
+completed.textContent = count.completed;
+uncompleted.textContent = count.uncompleted;
+all.textContent = count.all;
 const renderArray = function (array, wrapper) {
     wrapper.innerHTML = "";
     array.forEach(function (element) {
@@ -69,7 +73,7 @@ elForm.addEventListener("submit", function (evt) {
             isCompleted: false,
             
         });
-
+        console.log(todos);
         renderArray(todos, elList);
         elForm.reset();
     }
@@ -91,7 +95,8 @@ elForm.addEventListener("submit", function (evt) {
         elForm.reset();
     }
     if(elForm.click){
-        text3.textContent = ++t1;
+        all.textContent = ++count.all;
+        uncompleted.textContent = ++count.uncompleted;
     }
    
     
@@ -105,10 +110,18 @@ elList.addEventListener("click", function (evt) {
         });
         todos.splice(foundIndexTodo, 1);
         renderArray(todos, elList);
-
-        if(deleteButton.click){
-            text2.textContent = --t1;
+        
+        
+        // uncompleted.textContent = --count.uncompleted;
+        all.textContent = --count.all;
+        
+        if(count.completed != 0) {
+            completed.textContent = --count.completed;
         }
+        // if(count.uncompleted != 0){
+        //     uncompleted.textContent = --count.uncompleted;
+        // }
+
     }
     
     if (evt.target.matches(".btn_edit")) {
@@ -129,7 +142,10 @@ elList.addEventListener("click", function (evt) {
         });
         foundTodoCheckbox.isCompleted = !foundTodoCheckbox.isCompleted;
         renderArray(todos, elList);
-        text2.textContent = ++t2;
+        
+        
+        uncompleted.textContent = --count.uncompleted;
+        completed.textContent = ++count.completed;
     }
     
 });
