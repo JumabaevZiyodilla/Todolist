@@ -4,23 +4,35 @@ const elInput = elForm.querySelector(".wrap__input");
 const elBtn = elForm.querySelector(".wrap__btn");
 const elList = document.querySelector(".list");
 
-let completed = document.querySelector(".completed"); 
-let uncompleted = document.querySelector(".uncompleted"); 
-let all = document.querySelector(".all"); 
+let completed = document.querySelector(".completed");
+let uncompleted = document.querySelector(".uncompleted");
+let all = document.querySelector(".all");
 
-const todos = [];
+const LocalTodos = JSON.parse(window.localStorage.getItem('todos'));
+const todos = LocalTodos || [];
+
 let initialId = 0;
 let count = {
     completed: 0,
     uncompleted: 0,
     all: 0,
 }
-completed.textContent = count.completed;
-uncompleted.textContent = count.uncompleted;
-all.textContent = count.all;
+
 const renderArray = function (array, wrapper) {
     wrapper.innerHTML = "";
+
+    let isComp = todos.filter((add) =>{
+        return add.isCompleted == false;
+    });
+    uncompleted.textContent = isComp.length
+    let isCheck = todos.filter((param) =>{
+        return param.isCompleted == true;
+    });
+    completed.textContent = isCheck.length;
+    all.textContent = array.length;
+
     array.forEach(function (element) {
+
         const items = document.createElement("li");
         items.classList.add("items");
 
@@ -36,7 +48,7 @@ const renderArray = function (array, wrapper) {
         text.classList.add("text");
         items.appendChild(text);
 
-        if(element.isCompleted){
+        if (element.isCompleted) {
             checkbox.checked = true;
             text.style.textDecoration = "line-through";
         }
@@ -46,16 +58,17 @@ const renderArray = function (array, wrapper) {
         editButton.dataset.id = element.id;
         editButton.classList.add("btn_edit");
         items.appendChild(editButton);
-        wrapper.appendChild(items);   
+        wrapper.appendChild(items);
 
         const deleteButton = document.createElement("button");
         deleteButton.textContent = "Delete";
         deleteButton.dataset.id = element.id;
-        deleteButton.classList.add("btn_remove"); 
+        deleteButton.classList.add("btn_remove");
         items.appendChild(deleteButton);
     });
-};
 
+};
+renderArray(todos, elList);
 const formTypes = {
     SAVE: "save",
     EDIT: "edit",
@@ -71,14 +84,13 @@ elForm.addEventListener("submit", function (evt) {
             id: ++initialId,
             title: elInput.value,
             isCompleted: false,
-            
+
         });
-        console.log(todos);
-        renderArray(todos, elList);
         elForm.reset();
+        window.localStorage.setItem("todos", JSON.stringify(todos));
+        renderArray(todos, elList);
     }
-    
-    if(formType === formTypes.EDIT){
+    if (formType === formTypes.EDIT) {
         const obj = {
             id: editingId,
             title: elInput.value,
@@ -89,41 +101,27 @@ elForm.addEventListener("submit", function (evt) {
             return todo.id === obj.id;
         });
         todos.splice(editingFoundIndex, 1, obj);
-        renderArray(todos, elList);
+        window.localStorage.setItem("todos", JSON.stringify(todos));
         formType = formTypes.SAVE;
+        renderArray(todos, elList);
         elBtn.textContent = "Add";
         elForm.reset();
     }
-    if(elForm.click){
-        all.textContent = ++count.all;
-        uncompleted.textContent = ++count.uncompleted;
-    }
-   
-    
+
 });
 
 elList.addEventListener("click", function (evt) {
     if (evt.target.matches(".btn_remove")) {
         const deletedTodoId = Number(evt.target.dataset.id);
-        const foundIndexTodo = todos.findIndex(function(element){
+        const foundIndexTodo = todos.findIndex(function (element) {
             return element.id === deletedTodoId;
         });
         todos.splice(foundIndexTodo, 1);
         renderArray(todos, elList);
-        
-        
-        // uncompleted.textContent = --count.uncompleted;
-        all.textContent = --count.all;
-        
-        if(count.completed != 0) {
-            completed.textContent = --count.completed;
-        }
-        // if(count.uncompleted != 0){
-        //     uncompleted.textContent = --count.uncompleted;
-        // }
+        window.localStorage.setItem("todos", JSON.stringify(todos));
 
     }
-    
+
     if (evt.target.matches(".btn_edit")) {
         const editedTodoId = Number(evt.target.dataset.id);
         const editedTodo = todos.find(function (todo) {
@@ -137,15 +135,11 @@ elList.addEventListener("click", function (evt) {
 
     if (evt.target.matches(".input_checkbox")) {
         const checkboxId = Number(evt.target.dataset.id);
-        const foundTodoCheckbox = todos.find(function (todo){
+        const foundTodoCheckbox = todos.find(function (todo) {
             return todo.id === checkboxId;
         });
         foundTodoCheckbox.isCompleted = !foundTodoCheckbox.isCompleted;
+        window.localStorage.setItem("todos", JSON.stringify(todos));  
         renderArray(todos, elList);
-        
-        
-        uncompleted.textContent = --count.uncompleted;
-        completed.textContent = ++count.completed;
     }
-    
 });
